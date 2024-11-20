@@ -1,7 +1,21 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import './tailwind.css';
 
 function Homepage() {
+    const [rooms, setRooms] = useState([]);
+
+    useEffect(() => {
+        axios.get('http://localhost:3000/rooms/')
+            .then(response => {
+                console.log(response.data); // Debugging step
+                setRooms(response.data);
+            })
+            .catch(error => {
+                console.error('There was an error fetching the rooms!', error);
+            });
+    }, []);
+
     return (
         <div className="bg-[#FAFAFA] pt-10 md:pt-16 flex justify-center items-center">
             <div className="max-w-6xl mx-8 m-8">
@@ -18,7 +32,19 @@ function Homepage() {
                         <button className='text-white bg-blue-600 hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2'>
                             Create a room
                         </button>
-
+                        <ul>
+                            {rooms.length > 0 ? (
+                                rooms.map(room => (
+                                    <li className="p-4 bg-white rounded-lg shadow hover:bg-gray-100 transition cursor-pointer m-2">
+                                        <span className="text-blue-700 hover:underline">
+                                            {room.name}
+                                        </span>
+                                    </li>
+                                ))
+                            ) : (
+                                <li>No rooms available</li>
+                            )}
+                        </ul>
                     </div>
 
                     <div className='text-gray-900 col-span-3 bg-slate-200 rounded-lg p-8'>
