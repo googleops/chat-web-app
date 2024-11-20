@@ -15,7 +15,7 @@ function Footer() {
           <div className="text-gray-500 dark:text-gray-400">
             <h3 className='font-bold'>Contact Me</h3>
             <ul>
-              <li><a href="https://wa.me/+6282247554630">+62882247554630</a></li>
+              <li><a href="https://wa.me/+6282247554630">+6282247554630</a></li>
               <li>andrewfebrian3@gmail.com</li>
             </ul>
           </div>
