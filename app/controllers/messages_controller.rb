@@ -1,10 +1,15 @@
 class MessagesController < ApplicationController
-  # POST /messages
-  # Create a new message
+  # POST /rooms/:room_id/messages
   def create
-    @message = Message.new(message_params)
+    @room = Room.find_by(id: params[:room_id])
+    unless @room
+      render json: { error: "Room not found" }, status: :not_found
+      return
+    end
+
+    @message = @room.messages.build(message_params)
     if @message.save
-      ActionCable.server.broadcast "room_#{message_params[:room_id]}_messages", @message
+      ActionCable.server.broadcast("room_#{@room.id}_messages", @message)
       render json: @message, status: :created
     else
       render json: @message.errors, status: :unprocessable_entity
@@ -14,6 +19,6 @@ class MessagesController < ApplicationController
   private
 
   def message_params
-    params.require(:message).permit(:content, :room_id)
+    params.require(:message).permit(:content)
   end
 end
