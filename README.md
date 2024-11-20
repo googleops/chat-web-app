@@ -7,6 +7,7 @@ This is a real-time chat web application using Ruby on Rails. The application us
 * Ruby version : 3.0.2p107
 * Rails version : 7.1.5
 * Database : PostgreSQL
+* node version : 16.20.2
 
 ## Features
 
@@ -18,6 +19,7 @@ This is a real-time chat web application using Ruby on Rails. The application us
 | POST | /rooms/:id/messages | messages#create | Create a new message in a room |
 
 ## Setup
+### Backend
 
 1. Create a new Rails application using the following command:
 ```
@@ -58,5 +60,22 @@ rails generate rspec:model Message
 rails generate rspec:controller Rooms
 rails generate rspec:request Messages
 rails generate rspec:channel Room
+```
 
+8. To run unit tests, use the following command:
+```
+bundle exec rspec
+```
+
+### Frontend
+
+1. Create a new React application using the following command:
+```
+npx create-react-app frontend
+cd frontend
+```
+
+2. Install the following packages:
+```
+npm install axios react-router-dom
 ```
