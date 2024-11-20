@@ -8,6 +8,14 @@ This is a real-time chat web application using Ruby on Rails. The application us
 * Rails version : 7.1.5
 * Database : PostgreSQL
 
+## Features
+
+| Method | Path | Controller#Action | Description |
+| --- |--- |--- | --- |
+| GET | /rooms | rooms#index | Display all rooms |
+| POST | /rooms | rooms#create | Create a new room |
+| GET | /rooms/:id | rooms#show | Display a room |
+
 ## Setup
 
 1. Create a new Rails application using the following command:
@@ -28,4 +36,10 @@ rails db:create
 rails generate model Room name:string
 rails generate model Message content:text room:references
 rails db:migrate
+```
+
+5. Create the controllers using the following command:
+```
+rails generate controller Rooms
+rails generate controller Messages
 ```
