@@ -4,6 +4,7 @@ import './tailwind.css';
 
 function Homepage() {
     const [rooms, setRooms] = useState([]);
+    const [selectedRoom, setSelectedRoom] = useState(null);
 
     useEffect(() => {
         axios.get('http://localhost:3000/rooms/')
@@ -15,6 +16,10 @@ function Homepage() {
                 console.error('There was an error fetching the rooms!', error);
             });
     }, []);
+
+    const handleRoomClick = (room) => {
+        setSelectedRoom(room);
+    };
 
     return (
         <div className="bg-[#FAFAFA] pt-10 md:pt-16 flex justify-center items-center">
@@ -35,7 +40,11 @@ function Homepage() {
                         <ul>
                             {rooms.length > 0 ? (
                                 rooms.map(room => (
-                                    <li className="p-4 bg-white rounded-lg shadow hover:bg-gray-100 transition cursor-pointer m-2">
+                                    <li 
+                                        key={room.id} 
+                                        className="p-4 bg-white rounded-lg shadow hover:bg-gray-100 transition cursor-pointer m-2"
+                                        onClick={() => handleRoomClick(room)}
+                                    >
                                         <span className="text-blue-700 hover:underline">
                                             {room.name}
                                         </span>
@@ -48,10 +57,16 @@ function Homepage() {
                     </div>
 
                     <div className='text-gray-900 col-span-3 bg-slate-200 rounded-lg p-8'>
-                        <h2 className='font-bold text-2xl'>Chat Room</h2>
+                        <h2 className='font-bold text-2xl'>
+                            {selectedRoom ? `${selectedRoom.name}` : 'Chat Room'}
+                        </h2>
 
                         <div className='flex flex-col space-y-4 mt-4 h-96'>
-                            message area
+                            {selectedRoom ? (
+                                <div>Messages for {selectedRoom.name}</div>
+                            ) : (
+                                <div>Select a room to start chatting</div>
+                            )}
                         </div>
 
                         <div className='flex flex-col space-y-4 mt-4'>
