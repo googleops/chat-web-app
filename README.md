@@ -78,4 +78,5 @@ cd frontend
 2. Install the following packages:
 ```
 npm install axios react-router-dom
+npm install -D tailwindcss
 ```
