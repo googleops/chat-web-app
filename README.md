@@ -15,3 +15,10 @@ This is a real-time chat web application using Ruby on Rails. The application us
 rails new chat-app --api -d postgresql
 cd chat-app
 ```
+
+2. Setup the database configuration in `config/database.yml` file.
+
+3. Create the database using the following command:
+```
+rails db:create
+```
