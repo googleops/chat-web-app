@@ -108,6 +108,12 @@ function Homepage() {
         }
     };
 
+    const handleKeyPress = (e) => {
+        if (e.key === 'Enter') {
+            handleSendMessage(e);
+        }
+    };
+
     const handleCloseErrorModal = () => {
         setShowErrorModal(false);
         setErrorMessage('');
@@ -115,7 +121,7 @@ function Homepage() {
 
     return (
         <div className="bg-[#FAFAFA] pt-10 md:pt-16 flex justify-center items-center">
-            <div className="max-w-6xl mx-8 m-8">
+            <div className="max-w-6xl m-4 md:m-8">
                 <div className="text-gray-900">
                     <h1 className="text-4xl font-bold text-center m-8">Chat web apps</h1>
                     <p>Chat web apps developed with Ruby on Rails.
@@ -123,7 +129,7 @@ function Homepage() {
                         This project uses React for the frontend and PostgreSQL for the database</p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-4 max-w-6xl mx-8 m-8">
+                <div className="grid grid-cols-1 md:grid-cols-4 max-w-6xl md:m-8">
                     <div className='text-gray-900'>
                         <h2 className='font-bold text-2xl'>Rooms List</h2>
                         <button 
@@ -151,7 +157,7 @@ function Homepage() {
                         </ul>
                     </div>
 
-                    <div className='text-gray-900 col-span-3 bg-slate-200 rounded-lg p-8'>
+                    <div className='text-gray-900 col-span-3 bg-slate-200 rounded-lg p-4 md:p-8'>
                         <h2 className='font-bold text-2xl'>
                             {selectedRoom ? `${selectedRoom.name}` : 'Chat Room'}
                         </h2>
@@ -183,13 +189,14 @@ function Homepage() {
                                     placeholder='Type a message...' 
                                     value={newMessage}
                                     onChange={handleMessageChange}
+                                    onKeyPress={handleKeyPress}
                                     className='border border-gray-300 rounded-lg p-2 flex-grow' 
                                 />
                                 <button 
-                                    className='text-white bg-blue-600 hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 ml-2'
+                                    className='text-white bg-blue-600 hover:bg-blue-800 font-medium rounded-lg text-sm p-2.5 ml-2'
                                     onClick={handleSendMessage}
                                 >
-                                    Send
+                                    <img src='https://www.svgrepo.com/show/533310/send-alt-1.svg' alt='Send' className='w-8 h-8' />
                                 </button>
                             </div>
                         </div>
