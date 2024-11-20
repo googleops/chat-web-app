@@ -26,7 +26,7 @@ development:
   password: 111111
   host: localhost
   template: template0
-  #port: 5432
+  port: 5433
 
 test:
   <<: *default
@@ -40,4 +40,5 @@ production:
   <<: *default
   database: chat_app_production
   username: simpul
-  password: <%= ENV["MY_CHAT_APP_DATABASE_PASSWORD"] %>
+  password: 111111
+  port: 5433

@@ -1,6 +1,6 @@
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
-    origins 'http://localhost:3001' # React frontend URL
+    origins 'http://localhost:3001', 'https://chat.andrews.pp.ua' # React frontend URLs
     resource '*', headers: :any, methods: [:get, :post, :options]
   end
 end

@@ -16,7 +16,7 @@ function Homepage() {
     const messagesEndRef = useRef(null);
 
     useEffect(() => {
-        axios.get('http://localhost:3000/rooms/')
+        axios.get('https://chat-api.andrews.pp.ua/rooms/')
             .then(response => {
                 console.log(response.data); // Debugging step
                 setRooms(response.data);
@@ -28,7 +28,7 @@ function Homepage() {
 
     useEffect(() => {
         if (selectedRoom) {
-            const cable = createConsumer('ws://localhost:3000/cable');
+            const cable = createConsumer('https://chat-api.andrews.pp.ua/cable');
             const subscription = cable.subscriptions.create(
                 { channel: "RoomChannel", room_id: selectedRoom.id },
                 {
@@ -51,7 +51,7 @@ function Homepage() {
 
     const handleRoomClick = (room) => {
         setSelectedRoom(room);
-        axios.get(`http://localhost:3000/rooms/${room.id}`)
+        axios.get(`https://chat-api.andrews.pp.ua/rooms/${room.id}`)
             .then(response => {
                 setMessages(response.data.messages);
             })
@@ -80,7 +80,7 @@ function Homepage() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        axios.post('http://localhost:3000/rooms/', { room: { name: newRoomName } })
+        axios.post('https://chat-api.andrews.pp.ua/rooms/', { room: { name: newRoomName } })
             .then(response => {
                 setRooms([...rooms, response.data]);
                 handleCloseModal();
@@ -98,7 +98,7 @@ function Homepage() {
     const handleSendMessage = (e) => {
         e.preventDefault();
         if (selectedRoom && newMessage.trim() !== '') {
-            axios.post(`http://localhost:3000/rooms/${selectedRoom.id}/messages`, { message: { content: newMessage } })
+            axios.post(`https://chat-api.andrews.pp.ua/rooms/${selectedRoom.id}/messages`, { message: { content: newMessage } })
                 .then(response => {
                     setNewMessage('');
                 })

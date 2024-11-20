@@ -18,6 +18,32 @@ This is a real-time chat web application using Ruby on Rails. The application us
 | GET | /rooms/:id | rooms#show | Display a room |
 | POST | /rooms/:id/messages | messages#create | Create a new message in a room |
 
+## Deployment
+### Database
+
+Setup the PostgreSQL database using the following command:
+```
+sudo docker run -d -p 5433:5432 --name chat-db -e POSTGRES_USER=simpul -e POSTGRES_PASSWORD=111111 -e POSTGRES_DB=chat_app_development postgres:13.4
+rails db:create
+rails db:migrate
+```
+### Backend
+
+1. Build the Rails application using the following command:
+```
+sudo docker build -t chat-api:1.0 .
+sudo docker run -d -p 3000:3000 --name chat-api chat-api:1.0
+```
+
+### Frontend
+
+1. Build the React application using the following command:
+```
+cd frontend
+sudo docker build -t chat-web-app:1.0 .
+sudo docker run -d -p 4001:80 --name chat-web-app chat-web-app:1.0
+```
+
 ## Setup
 ### Backend
 
