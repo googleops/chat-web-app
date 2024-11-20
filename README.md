@@ -15,6 +15,7 @@ This is a real-time chat web application using Ruby on Rails. The application us
 | GET | /rooms | rooms#index | Display all rooms |
 | POST | /rooms | rooms#create | Create a new room |
 | GET | /rooms/:id | rooms#show | Display a room |
+| POST | /rooms/:id/messages | messages#create | Create a new message in a room |
 
 ## Setup
 
