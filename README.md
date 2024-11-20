@@ -77,6 +77,6 @@ cd frontend
 
 2. Install the following packages:
 ```
-npm install axios react-router-dom
+npm install axios react-router-dom date-fns @rails/actioncable
 npm install -D tailwindcss
 ```

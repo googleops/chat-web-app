@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './tailwind.css';
+import { createConsumer } from "@rails/actioncable";
+import { format } from 'date-fns';
 
 function Homepage() {
     const [rooms, setRooms] = useState([]);
     const [selectedRoom, setSelectedRoom] = useState(null);
+    const [messages, setMessages] = useState([]);
+    const [newMessage, setNewMessage] = useState('');
     const [showModal, setShowModal] = useState(false);
     const [newRoomName, setNewRoomName] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
@@ -21,8 +25,32 @@ function Homepage() {
             });
     }, []);
 
+    useEffect(() => {
+        if (selectedRoom) {
+            const cable = createConsumer('ws://localhost:3000/cable');
+            const subscription = cable.subscriptions.create(
+                { channel: "RoomChannel", room_id: selectedRoom.id },
+                {
+                    received: (message) => {
+                        setMessages((prevMessages) => [...prevMessages, message]);
+                    },
+                }
+            );
+            return () => {
+                subscription.unsubscribe();
+            };
+        }
+    }, [selectedRoom]);
+
     const handleRoomClick = (room) => {
         setSelectedRoom(room);
+        axios.get(`http://localhost:3000/rooms/${room.id}`)
+            .then(response => {
+                setMessages(response.data.messages);
+            })
+            .catch(error => {
+                console.error('There was an error fetching the messages!', error);
+            });
     };
 
     const handleCreateRoom = () => {
@@ -37,6 +65,10 @@ function Homepage() {
 
     const handleRoomNameChange = (e) => {
         setNewRoomName(e.target.value);
+    };
+
+    const handleMessageChange = (e) => {
+        setNewMessage(e.target.value);
     };
 
     const handleSubmit = (e) => {
@@ -54,6 +86,19 @@ function Homepage() {
                 }
                 setShowErrorModal(true);
             });
+    };
+
+    const handleSendMessage = (e) => {
+        e.preventDefault();
+        if (selectedRoom && newMessage.trim() !== '') {
+            axios.post(`http://localhost:3000/rooms/${selectedRoom.id}/messages`, { message: { content: newMessage } })
+                .then(response => {
+                    setNewMessage('');
+                })
+                .catch(error => {
+                    console.error('There was an error sending the message!', error);
+                });
+        }
     };
 
     const handleCloseErrorModal = () => {
@@ -106,7 +151,18 @@ function Homepage() {
 
                         <div className='flex flex-col space-y-4 mt-4 h-96'>
                             {selectedRoom ? (
-                                <div>Messages for {selectedRoom.name}</div>
+                                messages.length > 0 ? (
+                                    messages.map(message => (
+                                        <div key={message.id} className="p-2 bg-white rounded-lg shadow m-2">
+                                            <div>{message.content}</div>
+                                            <div className="text-gray-500 text-sm">
+                                                {format(new Date(message.created_at), 'PPpp')}
+                                            </div>
+                                        </div>
+                                    ))
+                                ) : (
+                                    <div>No messages in this room</div>
+                                )
                             ) : (
                                 <div>Select a room to start chatting</div>
                             )}
@@ -114,8 +170,17 @@ function Homepage() {
 
                         <div className='flex flex-col space-y-4 mt-4'>
                             <div className='flex'>
-                                <input type='text' placeholder='Type a message...' className='border border-gray-300 rounded-lg p-2 flex-grow' />
-                                <button className='text-white bg-blue-600 hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 ml-2'>
+                                <input 
+                                    type='text' 
+                                    placeholder='Type a message...' 
+                                    value={newMessage}
+                                    onChange={handleMessageChange}
+                                    className='border border-gray-300 rounded-lg p-2 flex-grow' 
+                                />
+                                <button 
+                                    className='text-white bg-blue-600 hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 ml-2'
+                                    onClick={handleSendMessage}
+                                >
                                     Send
                                 </button>
                             </div>

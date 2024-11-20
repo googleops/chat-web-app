@@ -1,14 +1,9 @@
 class RoomChannel < ApplicationCable::Channel
   def subscribed
-    if params[:room_id].present?
-      room = Room.find_by(id: params[:room_id])
-      if room
-        stream_for room
-      else
-        reject
-      end
-    else
-      reject
-    end
+    stream_from "room_#{params[:room_id]}_messages"
+  end
+
+  def unsubscribed
+    # Any cleanup needed when channel is unsubscribed
   end
 end
