@@ -13,9 +13,14 @@ class RoomsController < ApplicationController
   # GET /rooms/:id
   # Return a specific room by id
   def show
-    @room = Room.includes(:messages).find(params[:id])
-    render json: @room, include: :messages
+    @room = Room.includes(:messages).find_by(id: params[:id])
+    if @room
+      render json: @room, include: :messages
+    else
+      render json: { error: "Room not found" }, status: :not_found
+    end
   end
+  
 
   # POST /rooms
   # Create a new room
