@@ -13,9 +13,9 @@ function Navbar() {
                         </div>
                     </Link>
 
-                    <Link to="/rooms/new" className="text-[#FAFAFA] font-bold text-xl">
+                    <Link to="/about" className="text-[#FAFAFA] font-bold text-xl">
                         <div className="flex items-center">
-                            Create new chat room
+                            About This
                         </div>
                     </Link>
                 </div>
