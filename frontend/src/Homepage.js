@@ -5,6 +5,8 @@ import './tailwind.css';
 function Homepage() {
     const [rooms, setRooms] = useState([]);
     const [selectedRoom, setSelectedRoom] = useState(null);
+    const [showModal, setShowModal] = useState(false);
+    const [newRoomName, setNewRoomName] = useState('');
 
     useEffect(() => {
         axios.get('http://localhost:3000/rooms/')
@@ -21,6 +23,31 @@ function Homepage() {
         setSelectedRoom(room);
     };
 
+    const handleCreateRoom = () => {
+        setShowModal(true);
+    };
+
+    const handleCloseModal = () => {
+        setShowModal(false);
+        setNewRoomName('');
+    };
+
+    const handleRoomNameChange = (e) => {
+        setNewRoomName(e.target.value);
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        axios.post('http://localhost:3000/rooms/', { room: { name: newRoomName } })
+            .then(response => {
+                setRooms([...rooms, response.data]);
+                handleCloseModal();
+            })
+            .catch(error => {
+                console.error('There was an error creating the room!', error);
+            });
+    };
+
     return (
         <div className="bg-[#FAFAFA] pt-10 md:pt-16 flex justify-center items-center">
             <div className="max-w-6xl mx-8 m-8">
@@ -34,7 +61,10 @@ function Homepage() {
                 <div className="grid grid-cols-1 md:grid-cols-4 max-w-6xl mx-8 m-8">
                     <div className='text-gray-900'>
                         <h2 className='font-bold text-2xl'>Rooms List</h2>
-                        <button className='text-white bg-blue-600 hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2'>
+                        <button 
+                            className='text-white bg-blue-600 hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2'
+                            onClick={handleCreateRoom}
+                        >
                             Create a room
                         </button>
                         <ul>
@@ -78,10 +108,40 @@ function Homepage() {
                             </div>
                         </div>
                     </div>
-
                 </div>
-
             </div>
+
+            {showModal && (
+                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                    <div className="bg-white p-8 rounded-lg shadow-lg">
+                        <h2 className="text-2xl font-bold mb-4">Create a new room</h2>
+                        <form onSubmit={handleSubmit}>
+                            <input 
+                                type="text" 
+                                placeholder="Room name" 
+                                value={newRoomName} 
+                                onChange={handleRoomNameChange} 
+                                className="border border-gray-300 rounded-lg p-2 w-full mb-4"
+                            />
+                            <div className="flex justify-end">
+                                <button 
+                                    type="button" 
+                                    onClick={handleCloseModal} 
+                                    className="text-gray-700 bg-gray-200 hover:bg-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2"
+                                >
+                                    Cancel
+                                </button>
+                                <button 
+                                    type="submit" 
+                                    className="text-white bg-blue-600 hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5"
+                                >
+                                    Create
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
