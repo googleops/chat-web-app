@@ -49,3 +49,14 @@ rails generate controller Messages
 ```
 rails generate channel Room
 ```
+
+7. Prepare unit tests using the following command:
+```
+rails generate rspec:install
+rails generate rspec:model Room
+rails generate rspec:model Message
+rails generate rspec:controller Rooms
+rails generate rspec:request Messages
+rails generate rspec:channel Room
+
+```
