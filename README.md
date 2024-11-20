@@ -44,3 +44,8 @@ rails db:migrate
 rails generate controller Rooms
 rails generate controller Messages
 ```
+
+6. Create the channels using the following command:
+```
+rails generate channel Room
+```
