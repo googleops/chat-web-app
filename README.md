@@ -22,3 +22,10 @@ cd chat-app
 ```
 rails db:create
 ```
+
+4. Create the models using the following command:
+```
+rails generate model Room name:string
+rails generate model Message content:text room:references
+rails db:migrate
+```
