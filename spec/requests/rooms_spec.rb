@@ -46,12 +46,21 @@ RSpec.describe RoomsController, type: :controller do
       end
     end
 
-    context "with invalid parameters" do
+    context "with blank name parameters" do
       it "returns validation errors" do
         post :create, params: { room: { name: "" } }
         expect(response).to have_http_status(:unprocessable_entity)
         json_response = JSON.parse(response.body)
-        expect(json_response["name"]).to include("can't be blank")
+        expect(json_response["errors"]).to include("Name can't be blank")
+      end
+    end
+
+    context "with duplicate name parameters" do
+      it "returns validation errors" do
+        post :create, params: { room: { name: "General" } }
+        expect(response).to have_http_status(:unprocessable_entity)
+        json_response = JSON.parse(response.body)
+        expect(json_response["errors"]).to include("Name has already been taken")
       end
     end
   end

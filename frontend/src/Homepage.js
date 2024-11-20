@@ -7,6 +7,8 @@ function Homepage() {
     const [selectedRoom, setSelectedRoom] = useState(null);
     const [showModal, setShowModal] = useState(false);
     const [newRoomName, setNewRoomName] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
+    const [showErrorModal, setShowErrorModal] = useState(false);
 
     useEffect(() => {
         axios.get('http://localhost:3000/rooms/')
@@ -30,6 +32,7 @@ function Homepage() {
     const handleCloseModal = () => {
         setShowModal(false);
         setNewRoomName('');
+        setErrorMessage('');
     };
 
     const handleRoomNameChange = (e) => {
@@ -44,8 +47,18 @@ function Homepage() {
                 handleCloseModal();
             })
             .catch(error => {
-                console.error('There was an error creating the room!', error);
+                if (error.response && error.response.data && error.response.data.errors) {
+                    setErrorMessage(error.response.data.errors);
+                } else {
+                    setErrorMessage('There was an error creating the room!');
+                }
+                setShowErrorModal(true);
             });
+    };
+
+    const handleCloseErrorModal = () => {
+        setShowErrorModal(false);
+        setErrorMessage('');
     };
 
     return (
@@ -139,6 +152,24 @@ function Homepage() {
                                 </button>
                             </div>
                         </form>
+                    </div>
+                </div>
+            )}
+
+            {showErrorModal && (
+                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                    <div className="bg-white p-8 rounded-lg shadow-lg">
+                        <h2 className="text-2xl font-bold mb-4">Error</h2>
+                        <p className="text-red-500 mb-4">{errorMessage}</p>
+                        <div className="flex justify-end">
+                            <button 
+                                type="button" 
+                                onClick={handleCloseErrorModal} 
+                                className="text-white bg-blue-600 hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5"
+                            >
+                                Close
+                            </button>
+                        </div>
                     </div>
                 </div>
             )}

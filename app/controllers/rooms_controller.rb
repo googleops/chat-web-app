@@ -20,7 +20,6 @@ class RoomsController < ApplicationController
       render json: { error: "Room not found" }, status: :not_found
     end
   end
-  
 
   # POST /rooms
   # Create a new room
@@ -29,11 +28,12 @@ class RoomsController < ApplicationController
     if @room.save
       render json: @room, status: :created
     else
-      render json: @room.errors, status: :unprocessable_entity
+      render json: { errors: @room.errors.full_messages }, status: :unprocessable_entity
     end
   end
 
   private
+
   def room_params
     params.require(:room).permit(:name)
   end
