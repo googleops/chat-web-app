@@ -47,6 +47,8 @@ group :development do
   # gem "spring"
 end
 
+gem 'rack-cors'
+
 group :test do
   gem 'shoulda-matchers', '~> 5.0'
 end
