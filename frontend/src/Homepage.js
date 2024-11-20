@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import './tailwind.css';
 import { createConsumer } from "@rails/actioncable";
@@ -13,6 +13,7 @@ function Homepage() {
     const [newRoomName, setNewRoomName] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const [showErrorModal, setShowErrorModal] = useState(false);
+    const messagesEndRef = useRef(null);
 
     useEffect(() => {
         axios.get('http://localhost:3000/rooms/')
@@ -41,6 +42,12 @@ function Homepage() {
             };
         }
     }, [selectedRoom]);
+
+    useEffect(() => {
+        if (messagesEndRef.current) {
+            messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
+    }, [messages]);
 
     const handleRoomClick = (room) => {
         setSelectedRoom(room);
@@ -149,7 +156,7 @@ function Homepage() {
                             {selectedRoom ? `${selectedRoom.name}` : 'Chat Room'}
                         </h2>
 
-                        <div className='flex flex-col space-y-4 mt-4 h-96'>
+                        <div className='flex flex-col space-y-4 mt-4 h-96 overflow-auto'>
                             {selectedRoom ? (
                                 messages.length > 0 ? (
                                     messages.map(message => (
@@ -166,6 +173,7 @@ function Homepage() {
                             ) : (
                                 <div>Select a room to start chatting</div>
                             )}
+                            <div ref={messagesEndRef} />
                         </div>
 
                         <div className='flex flex-col space-y-4 mt-4'>
