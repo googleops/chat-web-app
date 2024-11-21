@@ -41,7 +41,7 @@ sudo docker run -d -p 3000:3000 --name chat-api chat-api:1.0
 ```
 cd frontend
 sudo docker build -t chat-web-app:1.0 .
-sudo docker run -d -p 4001:80 --name chat-web-app chat-web-app:1.0
+sudo docker run -d -p 3001:80 --name chat-web-app chat-web-app:1.0
 ```
 
 ## Setup
